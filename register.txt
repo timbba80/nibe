@@ -1,0 +1,43 @@
+root@emblinux:/tmp# ./nibe_monitor
+
+000 CPUID                   :     89         
+001 Aussentemp              :   16.6 °C     	002 ?                       :  32768     
+003 ?                       :  32768        	004 Heizkurvenverschiebung  :      0         
+005 Vorlauf Soll            :   22.2 °C     	006 Vorlauf Ist             :   25.2 °C     
+007 Ruecklauf               :   23.7 °C     	008 Gradminuten             :    0.0         
+009 Verd. Freq. Soll        :    0.0 Hz      	010 Verd. Freq. Ist         :    0.0 Hz      
+011 Kondensator aus (MAX)   :   26.1 °C     	012 Brauchwasser oben       :   50.3 °C     
+013 Brauchwasser unten      :   48.5 °C     	014 Verd. Temp. Tho-R1      :   14.0 °C     
+015 Verd. Temp. Tho-R2      :   14.0 °C     	016 Sauggas Temp. Tho-S     :   22.8 °C     
+017 Heissgas Temp. Tho-D    :   34.0 °C     	018 Fluessigkeitstemp AMS   :   20.3 °C     
+019 Hochdruck               :   12.9 bar     	020 Niederdruck             :    9.9 bar     
+021 Atemp. am AMS Tho-A     :   15.8 °C     	022 AMS Phase Ist           :    0.0 A       
+023 Invertertemp. Tho-IP    :   27.0 °C     	024 Verdichterlaufzeit      : 5709.8 h       
+025 Verdichterstarts        :     90         	026 ?                       :    214       
+027 Vorlauf                 :   25.2 °C     	028 ?                       :      0      
+029 ?                       :  33314        	030 ?                       :     50       
+031 Status Heizung          :      1         	032 Zusatzheizung erlaubt   :      0         
+033 Max dF Commpressor      :      3         	034 Verd. Freq. regP        :      5         
+035 Min Startzeit Freq      :     70 min     	036 Minzeit konst. Freq     :      3 min     
+037 Max Diff. soll-ber      :    4.0 °C     	038 Verd. Freq. GradMin     :    126         
+039 ?                       :      0        	040 Hysterese               :    1.0 °C     
+041 ?                       :     20        	042 ?                       :      0        
+043 Stopptemp. Heizen       :   17.0 °C     	044 Pumpengeschwindigkeit   :     70 %       
+045 Bw reg P                :     14         	046 Bw reg Q                :    110         
+047 Bw reg xP               :    2.5         	048 Bw reg Wert xP          :     40 %       
+049 Brauchwasser StartTemp  :   44.0 °C     	050 Brauchwasser StopTemp   :   50.0 °C
+
+Sonstiges
+031 Status Heizung
+	1 Auto
+	3 Heizung
+	5 Brauchwasser
+	6 Zusatzheizung
+
+Register						28		29 		30
+Heizung im Standby				0x0000	0x8222	0x0032
+Brauchwasserbereitung, AMS an	0x4409	0xA22A 	0x01FE
+Heizungspumpe ist an, AMS aus	0x0008	0xC22A	0x000A
+Zusatzheizung an				0x0000	0xC22A	0x003C
+
+	
