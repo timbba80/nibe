@@ -432,7 +432,7 @@ def publish_discovery_payloads():
                 "identifiers": ["nibe_heat_pump"],
                 "name": "Nibe Heat Pump",
                 "manufacturer": "Nibe",
-                "model": "EasySolar",
+                "model": "Nibe",
                 "sw_version": "1.0"
             }
         }
