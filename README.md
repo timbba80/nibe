@@ -12,6 +12,7 @@ Python
 Big thanks for CTR49 for the registers (register.txt and register.html), source: https://github.com/ctr49/nibe-knx-gw. 
 Note! The registers most likely vary basis of the model of the air to water heatpump. 
 Note! The register for operation mode is still incomplete, which results to "unknown" status in certain situations in the operation mode. I have not yed had the time to check from the heatpump what is the actual state for unknown states. Will do it later on. 
+Note! The sensor names in nibe.py are basis of the original python script. Thus they're in German language. I've kept them as they are and using Home Assistant sensor entity to customise them. Maybe if I find enough motiviation and time, I'll change the sensor names in the script to English. 
 
 Also big thanks for Eddso (https://knx-user-forum.de/forum/öffentlicher-bereich/knx-eib-forum/20371-anbindung-modbus-nibe?p=650159#post650159) for the initial python script. Script has been modified with openai chatpt e.g. for including mqtt. 
 
