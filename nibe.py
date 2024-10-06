@@ -73,18 +73,15 @@ nibe_registers = {
     29: "nibe/operation_mode_reg_29",
     30: "nibe/operation_mode_reg_30",
     23: "nibe/inverter_temp_tho_ip",
-    11: "nibe/condenser_off_max",  # Condenser off (MAX)
-    13: "nibe/domestic_hot_water_bottom",  # Domestic hot water bottom
-    14: "nibe/tho_r1_evap_temp",  # Tho-R1 evaporator temp
-    15: "nibe/tho_r2_evap_temp",  # Tho-R2 evaporator temp
-    16: "nibe/suction_gas_temp_tho_s",  # Suction gas temp. Tho-S
-    17: "nibe/hot_gas_temp_tho_d",  # Hot gas temp. Tho-D
-    18: "nibe/liquid_temp_ams",  # Liquid temp. AMS
-    21: "nibe/resp_at_ams_tho_a",  # Response at AMS Tho-A
+    11: "nibe/condenser_off_max",
+    13: "nibe/domestic_hot_water_bottom",
+    14: "nibe/tho_r1_evap_temp",
+    15: "nibe/tho_r2_evap_temp",
+    16: "nibe/suction_gas_temp_tho_s",
+    17: "nibe/hot_gas_temp_tho_d",
+    18: "nibe/liquid_temp_ams",
+    21: "nibe/resp_at_ams_tho_a",
 }
-  
-# uudet 28 eteenpäin
-
 
 # Define unique IDs and MQTT discovery configurations for each sensor
 mqtt_discovery_sensors = {
@@ -94,12 +91,11 @@ mqtt_discovery_sensors = {
         "state_topic": "nibe/pump_speed_percent",
         "unique_id": "nibe_pump_speed_percent"
     },
-#    "nibe/cpu_id": {
-#        "name": "CPU ID",
-#        "state_topic": "nibe/cpu_id",
-#        "unique_id": "nibe_cpu_id"
-#    },
-#uudet alkaa tästä
+    "nibe/cpu_id": {
+        "name": "CPU ID",
+        "state_topic": "nibe/cpu_id",
+        "unique_id": "nibe_cpu_id"
+    },
     "nibe/inverter_temp_tho_ip": {
         "name": "Inverter temp Tho-IP",
         "state_class": "measurement",
@@ -169,7 +165,6 @@ mqtt_discovery_sensors = {
         "device_class": "temperature",
         "unique_id": "nibe_resp_at_ams_tho_a"
     },     
-#uudet loppuu tähän  
     "nibe/heating_curve": {
         "name": "Heating Curve",
         "state_topic": "nibe/heating_curve",
@@ -257,36 +252,36 @@ mqtt_discovery_sensors = {
         "state_topic": "nibe/bw_reg_value_xp_percent",
         "unique_id": "nibe_bw_reg_value_xp_percent"
     },
-#    "nibe/date_year": {
-#        "name": "Date Year",
-#        "state_topic": "nibe/date_year",
-#        "unique_id": "nibe_date_year"
-#    },
-#    "nibe/date_month": {
-#        "name": "Date Month",
-#        "state_topic": "nibe/date_month",
-#        "unique_id": "nibe_date_month"
-#    },
-#    "nibe/date_day": {
-#        "name": "Date Day",
-#        "state_topic": "nibe/date_day",
-#        "unique_id": "nibe_date_day"
-#    },
-#    "nibe/time_hour": {
-#        "name": "Time Hour",
-#        "state_topic": "nibe/time_hour",
-#        "unique_id": "nibe_time_hour"
-#    },
-#    "nibe/time_minute": {
-#        "name": "Time Minute",
-#        "state_topic": "nibe/time_minute",
-#        "unique_id": "nibe_time_minute"
-#    },
-#    "nibe/time_second": {
-#        "name": "Time Second",
-#        "state_topic": "nibe/time_second",
-#        "unique_id": "nibe_time_second"
-#    },
+    "nibe/date_year": {
+        "name": "Date Year",
+        "state_topic": "nibe/date_year",
+        "unique_id": "nibe_date_year"
+    },
+    "nibe/date_month": {
+        "name": "Date Month",
+        "state_topic": "nibe/date_month",
+        "unique_id": "nibe_date_month"
+    },
+    "nibe/date_day": {
+        "name": "Date Day",
+        "state_topic": "nibe/date_day",
+        "unique_id": "nibe_date_day"
+    },
+    "nibe/time_hour": {
+        "name": "Time Hour",
+        "state_topic": "nibe/time_hour",
+        "unique_id": "nibe_time_hour"
+    },
+    "nibe/time_minute": {
+        "name": "Time Minute",
+        "state_topic": "nibe/time_minute",
+        "unique_id": "nibe_time_minute"
+    },
+    "nibe/time_second": {
+        "name": "Time Second",
+        "state_topic": "nibe/time_second",
+        "unique_id": "nibe_time_second"
+    },
     "nibe/run_time_compressor_h": {
         "name": "Run Time Compressor Hours",
         "state_topic": "nibe/run_time_compressor_h",
@@ -393,7 +388,6 @@ mqtt_discovery_sensors = {
         "name": "Heating Status",
         "state_topic": "nibe/heating_status",
         "unique_id": "nibe_heating_status"
-        # No unit_of_measurement or device_class needed here
     },
     "nibe/additional_heating": {
         "name": "Additional Heating Allowed",
@@ -476,6 +470,7 @@ def _decode(reg, raw):
         logger.debug(f"Register 30 (operation mode) value: {reg30_value}")
 
         # Now that we have all three registers, interpret the state
+        # Not yet fully mapped, leading MQTT to report "uknown" values.
         if reg28_value == 0x0000 and reg29_value == 0x8222 and reg30_value == 0x0032:
             publish_mqtt("nibe/operation_mode", "Standby")
         elif reg28_value == 0x4409 and reg29_value == 0xA22A and reg30_value == 0x01FE:
