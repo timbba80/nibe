@@ -28,6 +28,7 @@ RS-485 setup:
 3. The cable is connected either to a RJ-45 socket in the "motherboard" of the heat pump (can be seen after removing the front panel) or to the connector behind the display panel (I haven't tested the display panel connection, thus not sure if it works). 
 
 Python script: 
+
 4. Change COM port in nibe.py to the correct COM port (row 28)
 5. Configure MQTT details in nibe.py (row 14, 15)
 
