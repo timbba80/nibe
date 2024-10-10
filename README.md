@@ -1,11 +1,14 @@
 Simple python script for being able to read data from older Nibe/Mitsubishi hydrolution split air to water heatpumps which do not have official data bus (modbus, wifi, Ethernet) for collecting data. 
 
-It utilizes logger (menu 9.3.2) for reading the data
+It utilizes logger (menu 9.3.2) for reading the data. 
+
+Working at least with Mitsubishi Heavy Industries hydrolution HMA100v and Nibe ACVM270. 
+Other MHI/Nibe split pumps might work as well, as long as they use the same logic for the logger function (handshake between the heatpump and the system to which the RS485 adapter is connected to (and from where the python script is ran from) and as long as they have same registers than the two earlier mentioned models.
 
 Big thanks to CTR49 for the registers (register.txt and register.html), source: https://github.com/ctr49/nibe-knx-gw. 
 Note! The registers most likely vary basis of the model of the air to water heatpump and to Eddso (https://knx-user-forum.de/forum/öffentlicher-bereich/knx-eib-forum/20371-anbindung-modbus-nibe?p=650159#post650159) for the initial python script. Script has been modified with openai chatpt e.g. for including mqtt.
 
-The register for operation mode is still incomplete, which results to "unknown" status in certain situations in the operation mode. There are also some registers which are not recognized (what's the purpose of the register). 
+The register for operation mode is still incomplete, which results to "unknown" status in certain situations in the operation mode. There are also some registers which are not recognized. They send data but what the data inteprets (which sensor) is unknown.
 
 The sensor names in nibe.py are basis of the original python script. I've kept them as they are and am using Home Assistant sensor entity to customise them. As most likely the usage of this script will be so minor, I do not see point of adjusting these nor modifying the script to add support for automatic translation. Feel free to modify... in theory the sensor data could be in sensor.py file, mqtt in own file, decoding in own file and translation in own file etc....
 
