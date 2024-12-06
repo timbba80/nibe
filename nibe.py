@@ -5,15 +5,15 @@ import paho.mqtt.client as mqtt
 from struct import unpack, pack
 
 # Setup logger
-logging.basicConfig(level=logging.WARNING) #change logging level as wanted. This will log messages to console. If you want to use text file, use the logging configuration from below. 
+logging.basicConfig(level=logging.WARNING)
 #logging.basicConfig(level=logging.WARNING, filename='nibe_debug.log', filemode='w', format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger('NIBE')
 
 # MQTT setup
 mqtt_client = mqtt.Client()
-mqtt_client.username_pw_set(username="username", password="password")  #add MQTT username + password
-mqtt_client.connect("mqtt server", 1883, 60) #add MQTT server IP /DNS name. Change port if required1883
-
+mqtt_client.reconnect_delay_set(min_delay=1, max_delay=60)
+mqtt_client.username_pw_set(username="usrname", password="pswd") #set mqtt broker username + password
+mqtt_client.connect("0.0.0.0", 1883, 60) #set mqtt broker ip address and port
 
 def publish_mqtt(topic, message):
     mqtt_client.publish(topic, message)
@@ -82,6 +82,7 @@ nibe_registers = {
     18: "nibe/liquid_temp_ams",
     21: "nibe/resp_at_ams_tho_a",
 }
+  
 
 # Define unique IDs and MQTT discovery configurations for each sensor
 mqtt_discovery_sensors = {
@@ -91,11 +92,11 @@ mqtt_discovery_sensors = {
         "state_topic": "nibe/pump_speed_percent",
         "unique_id": "nibe_pump_speed_percent"
     },
-    "nibe/cpu_id": {
-        "name": "CPU ID",
-        "state_topic": "nibe/cpu_id",
-        "unique_id": "nibe_cpu_id"
-    },
+#    "nibe/cpu_id": {
+#        "name": "CPU ID",
+#        "state_topic": "nibe/cpu_id",
+#        "unique_id": "nibe_cpu_id"
+#    },
     "nibe/inverter_temp_tho_ip": {
         "name": "Inverter temp Tho-IP",
         "state_class": "measurement",
@@ -112,7 +113,7 @@ mqtt_discovery_sensors = {
     "nibe/condenser_off_max": {
         "name": "Condenser Off (MAX)",
         "state_topic": "nibe/condenser_off_max",
-        "unit_of_measurement": "°C",  # Adjust if needed
+        "unit_of_measurement": "°C",
         "device_class": "temperature",
         "unique_id": "nibe_condenser_off_max"
     },
@@ -252,36 +253,38 @@ mqtt_discovery_sensors = {
         "state_topic": "nibe/bw_reg_value_xp_percent",
         "unique_id": "nibe_bw_reg_value_xp_percent"
     },
-    "nibe/date_year": {
-        "name": "Date Year",
-        "state_topic": "nibe/date_year",
-        "unique_id": "nibe_date_year"
-    },
-    "nibe/date_month": {
-        "name": "Date Month",
-        "state_topic": "nibe/date_month",
-        "unique_id": "nibe_date_month"
-    },
-    "nibe/date_day": {
-        "name": "Date Day",
-        "state_topic": "nibe/date_day",
-        "unique_id": "nibe_date_day"
-    },
-    "nibe/time_hour": {
-        "name": "Time Hour",
-        "state_topic": "nibe/time_hour",
-        "unique_id": "nibe_time_hour"
-    },
-    "nibe/time_minute": {
-        "name": "Time Minute",
-        "state_topic": "nibe/time_minute",
-        "unique_id": "nibe_time_minute"
-    },
-    "nibe/time_second": {
-        "name": "Time Second",
-        "state_topic": "nibe/time_second",
-        "unique_id": "nibe_time_second"
-    },
+
+#enable if you want mqtt to publish time and date
+#    "nibe/date_year": {
+#        "name": "Date Year",
+#        "state_topic": "nibe/date_year",
+#        "unique_id": "nibe_date_year"
+#    },
+#    "nibe/date_month": {
+#        "name": "Date Month",
+#        "state_topic": "nibe/date_month",
+#        "unique_id": "nibe_date_month"
+#    },
+#    "nibe/date_day": {
+#        "name": "Date Day",
+#        "state_topic": "nibe/date_day",
+#        "unique_id": "nibe_date_day"
+#    },
+#    "nibe/time_hour": {
+#        "name": "Time Hour",
+#        "state_topic": "nibe/time_hour",
+#        "unique_id": "nibe_time_hour"
+#    },
+#    "nibe/time_minute": {
+#        "name": "Time Minute",
+#        "state_topic": "nibe/time_minute",
+#        "unique_id": "nibe_time_minute"
+#    },
+#    "nibe/time_second": {
+#        "name": "Time Second",
+#        "state_topic": "nibe/time_second",
+#        "unique_id": "nibe_time_second"
+#    },
     "nibe/run_time_compressor_h": {
         "name": "Run Time Compressor Hours",
         "state_topic": "nibe/run_time_compressor_h",
@@ -424,9 +427,9 @@ def publish_discovery_payloads():
             "payload_not_available": "offline",
             "device": {
                 "identifiers": ["nibe_heat_pump"],
-                "name": "Nibe Heat Pump",
-                "manufacturer": "Nibe",
-                "model": "Nibe",
+                "name": "Mitsubishi heavy industries Heat Pump",
+                "manufacturer": "MHI",
+                "model": "HMA100v",
                 "sw_version": "1.0"
             }
         }
@@ -470,19 +473,32 @@ def _decode(reg, raw):
         logger.debug(f"Register 30 (operation mode) value: {reg30_value}")
 
         # Now that we have all three registers, interpret the state
-        # Not yet fully mapped, leading MQTT to report "uknown" values.
         if reg28_value == 0x0000 and reg29_value == 0x8222 and reg30_value == 0x0032:
             publish_mqtt("nibe/operation_mode", "Standby")
         elif reg28_value == 0x4409 and reg29_value == 0xA22A and reg30_value == 0x01FE:
-            publish_mqtt("nibe/operation_mode", "Domestic Hot Water Preparation")
+            publish_mqtt("nibe/operation_mode", "Käyttövesi") #domestic water
         elif reg28_value == 0x0008 and reg29_value == 0xC22A and reg30_value == 0x000A:
-            publish_mqtt("nibe/operation_mode", "Heating Pump On, AMS Off")
+            publish_mqtt("nibe/operation_mode", "Pois päältä") #power on, heatpump off
+        elif reg28_value == 26634 and reg29_value == 49706 and reg30_value == 170:
+            publish_mqtt("nibe/operation_mode", "Öljy paluu") #oil return
+        elif reg28_value == 16394 and reg29_value == 49706 and reg30_value == 610:
+            publish_mqtt ("nibe/operation_mode", "Lämmmitys") #heating
+        elif reg28_value == 16394 and reg29_value == 49706 and reg30_value == 10:
+            publish_mqtt ("nibe/operation_mode", "Lämmitys") #heating
         elif reg28_value == 0x0000 and reg29_value == 0xC22A and reg30_value == 0x003C:
-            publish_mqtt("nibe/operation_mode", "Auxiliary Heating On")
+            publish_mqtt("nibe/operation_mode", "Vain sähkövastukset") #additional heating only
         elif reg28_value == 16385 and reg29_value == 41514 and reg30_value == 50:
-            publish_mqtt("nibe/operation_mode", "Heating Domestic Water")
+            publish_mqtt("nibe/operation_mode", "Käyttövesi") #domestic water
         elif reg28_value == 16393 and reg29_value == 49706 and reg30_value == 10:
-            publish_mqtt("nibe/operation_mode", "Heating House")
+            publish_mqtt("nibe/operation_mode", "Lämmitys") # heating
+        elif reg28_value == 10 and reg29_value == 49706 and reg30_value == 10:
+            publish_mqtt("nibe/operation_mode", "Pois päältä") #power on, heatpump off
+        elif reg28_value == 28 and reg29_value == 49706 and reg30_value == 10:
+            publish_mqtt("nibe/operation_mode", "lämmitys") #heating
+        elif reg28_value == 10 and reg29_value == 49706 and reg30_value == 610:
+            publish_mqtt("nibe/operation_mode", "Pois päältä") #power on, heatpump off
+        elif reg28_value == 32776 and reg29_value == 49706 and reg30_value == 10:
+            publish_mqtt("nibe/operation_mode", "Jäätymisensuoja") #freeze protection
         else:
             logger.warning(f"Unknown combination of register values: reg28={reg28_value}, reg29={reg29_value}, reg30={reg30_value}")
             publish_mqtt("nibe/operation_mode", f"Unknown mode: reg28={reg28_value}, reg29={reg29_value}, reg30={reg30_value}")
@@ -500,11 +516,11 @@ def _decode(reg, raw):
         if value == 1:
             publish_mqtt("nibe/heating_status", "auto")
         elif value == 3:
-            publish_mqtt("nibe/heating_status", "heating")
+            publish_mqtt("nibe/heating_status", "lämmitys") #heating
         elif value == 5:
-            publish_mqtt("nibe/heating_status", "domestic_water")
+            publish_mqtt("nibe/heating_status", "lämminvesi") #domestic water
         elif value == 6:
-            publish_mqtt("nibe/heating_status", "additional_heating")
+            publish_mqtt("nibe/heating_status", "lisäys (sähkö)") #additional heating
         return None
 
     # Handle temperature and flow registers
