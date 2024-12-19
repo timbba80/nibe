@@ -40,7 +40,30 @@ def decode_register(reg, raw):
 def interpret_state():
     if reg28_value == 0x0000 and reg29_value == 0x8222 and reg30_value == 0x0032:
         publish_mqtt("nibe/operation_mode", "Standby")
-    # Add more interpretations based on the original script
+    elif reg28_value == 0x4409 and reg29_value == 0xA22A and reg30_value == 0x01FE:
+        publish_mqtt("nibe/operation_mode", "Käyttövesi") #domestic water
+    elif reg28_value == 0x0008 and reg29_value == 0xC22A and reg30_value == 0x000A:
+        publish_mqtt("nibe/operation_mode", "Pois päältä") #power on, heatpump off
+    elif reg28_value == 26634 and reg29_value == 49706 and reg30_value == 170:
+        publish_mqtt("nibe/operation_mode", "Öljy paluu") #oil return
+    elif reg28_value == 16394 and reg29_value == 49706 and reg30_value == 610:
+        publish_mqtt ("nibe/operation_mode", "Lämmmitys") #heating
+    elif reg28_value == 16394 and reg29_value == 49706 and reg30_value == 10:
+        publish_mqtt ("nibe/operation_mode", "Lämmitys") #heating
+    elif reg28_value == 0x0000 and reg29_value == 0xC22A and reg30_value == 0x003C:
+        publish_mqtt("nibe/operation_mode", "Vain sähkövastukset") #additional heating only
+    elif reg28_value == 16385 and reg29_value == 41514 and reg30_value == 50:
+        publish_mqtt("nibe/operation_mode", "Käyttövesi") #domestic water
+    elif reg28_value == 16393 and reg29_value == 49706 and reg30_value == 10:
+        publish_mqtt("nibe/operation_mode", "Lämmitys") # heating
+    elif reg28_value == 10 and reg29_value == 49706 and reg30_value == 10:
+        publish_mqtt("nibe/operation_mode", "Pois päältä") #power on, heatpump off
+    elif reg28_value == 28 and reg29_value == 49706 and reg30_value == 10:
+        publish_mqtt("nibe/operation_mode", "lämmitys") #heating
+    elif reg28_value == 10 and reg29_value == 49706 and reg30_value == 610:
+        publish_mqtt("nibe/operation_mode", "Pois päältä") #power on, heatpump off
+    elif reg28_value == 32776 and reg29_value == 49706 and reg30_value == 10:
+        publish_mqtt("nibe/operation_mode", "Jäätymisensuoja") #freeze protection
     else:
         logger.warning(f"Unknown combination of register values: reg28={reg28_value}, reg29={reg29_value}, reg30={reg30_value}")
         publish_mqtt("nibe/operation_mode", f"Unknown mode: reg28={reg28_value}, reg29={reg29_value}, reg30={reg30_value}")
