@@ -32,8 +32,8 @@ RS-485 setup:
 
 Python script: 
 
-4. Change COM port in nibe.py to the correct COM port (row 28)
-5. Configure MQTT details in nibe.py (row 14, 15)
+4. Change COM port in serial_handler.py to the correct COM port (row 12)
+5. Configure MQTT details in mqtt_helper.py (row 10 and 11)
 
 Heat pump configuration:
 
