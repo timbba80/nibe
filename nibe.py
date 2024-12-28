@@ -5,15 +5,15 @@ import paho.mqtt.client as mqtt
 from struct import unpack, pack
 
 # Setup logger
-logging.basicConfig(level=logging.WARNING)
-#logging.basicConfig(level=logging.WARNING, filename='nibe_debug.log', filemode='w', format='%(asctime)s - %(levelname)s - %(message)s')
+#logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(level=logging.WARNING, filename='nibe_debug.log', filemode='w', format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger('NIBE')
 
 # MQTT setup
 mqtt_client = mqtt.Client()
 mqtt_client.reconnect_delay_set(min_delay=1, max_delay=60)
-mqtt_client.username_pw_set(username="usrname", password="pswd") #set mqtt broker username + password
-mqtt_client.connect("0.0.0.0", 1883, 60) #set mqtt broker ip address and port
+mqtt_client.username_pw_set(username="usr", password="pswd") 
+mqtt_client.connect("0.0.0.0", 1883, 60)
 
 def publish_mqtt(topic, message):
     mqtt_client.publish(topic, message)
@@ -499,6 +499,12 @@ def _decode(reg, raw):
             publish_mqtt("nibe/operation_mode", "Pois päältä") #power on, heatpump off
         elif reg28_value == 32776 and reg29_value == 49706 and reg30_value == 10:
             publish_mqtt("nibe/operation_mode", "Jäätymisensuoja") #freeze protection
+        elif reg28_value == 32778 and reg29_value == 49706 and reg30_value == 10:
+            publish_mqtt("nibe/operation_mode", "Jäätymisensuoja") #freeze protection
+        elif reg28_value == 17419 and reg29_value == 41514 and reg30_value == 510:
+            publish_mqtt("nibe/operation_mode", "Käyttövesi") #domestic water
+        elif reg28_value == 17425 and reg29_value == 41514 and reg30_value == 450:
+            publish_mqtt("nibe/operation_mode", "LisäLV") #
         else:
             logger.warning(f"Unknown combination of register values: reg28={reg28_value}, reg29={reg29_value}, reg30={reg30_value}")
             publish_mqtt("nibe/operation_mode", f"Unknown mode: reg28={reg28_value}, reg29={reg29_value}, reg30={reg30_value}")
