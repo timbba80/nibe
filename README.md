@@ -35,6 +35,7 @@ Python script:
 4. Change COM port in nibe.py to the correct COM port (row 28)
 5. Configure MQTT details in nibe.py (row 15, 16)
 
+
 Heat pump configuration:
 
 6. Once RS-485 cable has been set up and connected, go to menu option 9.3.2 (logger) in the heat pump and enable logger. Note! For accessing menu 9.3.2 one might need to change menu type to "service" from 8.1.1).
