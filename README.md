@@ -6,7 +6,9 @@ Working at least with Mitsubishi Heavy Industries hydrolution HMA100v and Nibe A
 Other MHI/Nibe split pumps might work as well, as long as they use the same logic for the logger function (handshake between the heatpump and the system to which the RS485 adapter is connected to (and from where the python script is ran from) and as long as they have same registers than the two earlier mentioned models.
 
 Big thanks to CTR49 for the registers (register.txt and register.html), source: https://github.com/ctr49/nibe-knx-gw. 
-Note! The registers most likely vary basis of the model of the air to water heatpump and to Eddso (https://knx-user-forum.de/forum/öffentlicher-bereich/knx-eib-forum/20371-anbindung-modbus-nibe?p=650159#post650159) for the initial python script. Script has been modified with openai chatpt e.g. for including mqtt.
+and to Eddso (https://knx-user-forum.de/forum/öffentlicher-bereich/knx-eib-forum/20371-anbindung-modbus-nibe?p=650159#post650159) for the initial python script. Script has been modified with openai chatpt e.g. for including mqtt.
+
+Please note! The registers might vary basis of the model of the air to water heatpump. 
 
 The register for operation mode is still incomplete, which results to "unknown" status in certain situations in the operation mode. There are also some registers which are not recognized. They send data but what the data inteprets (which sensor) is unknown.
 
@@ -16,7 +18,7 @@ The sensor names in nibe.py are basis of the original python script. I've kept t
 **Requirements: 
 **
 paho mqtt client
-RS-485 module. 
+RS-485 module
 MQTT broker
 Python
 
