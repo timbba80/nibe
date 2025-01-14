@@ -13,6 +13,7 @@ logger = logging.getLogger('NIBE')
 mqtt_client = mqtt.Client()
 mqtt_client.reconnect_delay_set(min_delay=1, max_delay=60)
 mqtt_client.username_pw_set(username="xxx", password="xxx") 
+mqtt_client.will_set("nibe/status", "offline", retain=True)
 mqtt_client.connect("0.0.0.0", 1883, 60)
 
 def publish_mqtt(topic, message):
@@ -21,7 +22,7 @@ def publish_mqtt(topic, message):
 
 # Publish "online" status to availability topic
 def publish_availability(status):
-    mqtt_client.publish("nibe/status", status)
+    mqtt_client.publish("nibe/status", status, retain=True)
     logger.info(f"Published availability status: {status}")
 
 # Serial connection to Nibe heat pump (adjust COM port for Windows)
