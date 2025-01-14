@@ -475,7 +475,7 @@ def _decode(reg, raw):
 
         # Now that we have all three registers, interpret the state
         if reg28_value == 0x0000 and reg29_value == 0x8222 and reg30_value == 0x0032:
-            publish_mqtt("nibe/operation_mode", "Standby")
+            publish_mqtt("nibe/operation_mode", "Pois päältä") #power on, heatpump off
         elif reg28_value == 0x4409 and reg29_value == 0xA22A and reg30_value == 0x01FE:
             publish_mqtt("nibe/operation_mode", "Käyttövesi") #domestic water
         elif reg28_value == 0x0008 and reg29_value == 0xC22A and reg30_value == 0x000A:
